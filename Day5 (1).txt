@@ -1,0 +1,124 @@
+AWS Bigdata Engineering --- Day 5
+Trainer: Prashant Nair
+==================================================================================================
+
+
+
+Preprocessing and Data Transfer Activity
+
+Dedicated System
+	- Boto3 installed
+	- Developed an App
+	- Deployed App and executed the same (Consumer.py)
+
+
+
+
+
+
+
+
+
+
+Do we have a PaaS service that can do the same work we did in the last lecture? --- YES
+
+
+
+Server-Based Architecture
+----------------------------
+
+LogGenerator ---> Agent ---> Kinesis Data Stream  ----> EC2 -----------------> DynamoDB
+(EC2)							(Consumer.py)
+
+
+Server-Less Architecture
+----------------------------
+
+LogGenerator ---> Agent ---> Kinesis Data Stream  ----> AWS Lambda ------------> DynamoDB
+(EC2)							(Consumer.py)
+
+
+
+AWS Lambda Lab (20 mins -- Complete the steps ) --- 2:35pm IST
+---------------
+1. Create EC2 instance and install LogGenerator with agent
+
+2. Create relevant DynamoDB table
+
+
+1. Spin an EC2 instance. Ensure its attached with Administrator access role. Setup LogGenerator and create essential folders.
+
+Steps to Create a Data Stream
+
+2. Go to Kinesis Dashboard > Click on Kinesis Data Stream > Create Data Stream
+3. Set the Stream name  and Click on Create Data Stream
+
+4. Append the below configuration in the agent file
+
+
+{
+      "filePattern": "/var/log/cadabra/*.log",
+      "kinesisStream": "CadabraOrders",
+      "partitionKeyOption": "RANDOM",
+      "dataProcessingOptions": [
+         {
+            "optionName": "CSVTOJSON",
+            "customFieldNames": ["InvoiceNo", "StockCode", "Description", "Quantity", "InvoiceDate", "UnitPrice", "Customer", "Country"]
+         }
+      ]
+    }
+
+Restarted the agent
+
+	sudo service aws-kinesis-agent restart
+
+Setup Amazon DynamoDB
+
+	Table: CadabraOrders
+	Primary Key: CustomerID ,Datatype: Number
+	Sort Key: OrderID , Datatype: String
+
+5. Setup IAM for Lambda Function
+	- Create a new Role for Lambda named CadabraOrdersLambdaPermission
+	- Kinesis --- Full  (AmazonKinesisFullAccess)
+	- Amazon DynamoDB --- Read/Write (AmazonDynamoDBFullAccess)
+	- AWSLambdaDefaultExecutionRole
+
+
+6. Setup Lambda Function
+	- Go to Lambda Dashboard
+	- Click on Create Function
+	- Click Author From Scratch > Function Name: CadabraOrderFetchKinesis2Dynamo > Runtime: Python 3.6
+	- Change the default Execution Role > Use an existing role >CadabraOrdersLambdaPermission
+	- Click on Create Function
+
+7. To make the Lambda Function work properly, we need to setup a trigger. In this scenario, the trigger can be AWS Kinesis Data Stream > CadabraOrders
+	(Goal: Whenever any new data arrives to CadabraOrders data stream, the function must execute 	and transfer the data to DynamoDB)
+
+	To configure the trigger, click on Add Trigger
+	Under Trigger Conf, select Kinesis
+	Select CadabraOrders and keep remaining options default.
+	Click on Add.
+
+8. Its time to copy paste the code. Click on Layers in Lambda Function and paste the code in the editor
+
+9. We will initiate a data transfer so that the trigger will be enabled
+
+	- Go to EC2 prompt and 
+		sudo ./LogGenerator.py 100000
+
+10. Check whether the data received in Amazon DynamoDB
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 	

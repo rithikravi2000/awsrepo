@@ -1,0 +1,155 @@
+AWS Bigdata
+Trainer: Prashant Nair
+===============================================================================================
+
+Azure_123
+
+				Data warehousing Solutions
+						|
+			-----------------------------------------------
+			|					      |
+	Server-less Architecture				Server-based Architecture
+	
+	Athena							Redshift
+
+
+Metadata management
+--------------------
+
+AWS Glue 
+	1. Maintain /Discover the metadata
+	
+You can generate the metadata manually / via crawler.
+
+
+
+Create a Data warehouse solution using Server-based Architecture
+================================================================
+
+Redshift
+
+Lab1: Using automobile dataset
+-------------------------------
+1. LOad the auto-data.csv into S3 ( dataset268726/automobile/auto-data.csv)
+
+2. Use Glue Crawler to detect the metadata for the dataset
+
+	15 mins :) Complete the above two steps.
+
+
+
+
+
+3. Create Redshift Cluster
+	- Go to Redshift Dashboard
+	- Click on Create Cluster 
+	- Follow the on-screen instructions to create the cluster. Ensure you set the username           and password and remember the same to login whenever required
+
+4. Create an IAM Role for performing the queries in redshift
+
+	Data: S3 (ReadWrite)
+	Metadata: Glue (Read)
+		
+		- Go to IAM Dashboard and create an IAM role > Click on Role
+		- Select Redshift > Redshift - Customizable
+				
+			 AWSGlueConsoleFullAccess
+			 AmazonS3FullAccess
+
+4. We will access the Query Editor of Redshift to perform queries
+		
+	- Go to Redshift Dashboard > Editor > Query Editor
+	- Connect to a database to run queries and view results.
+		Click on Connect to Database > GIve the following Information
+			Database Name: dev
+			Database username : awsuser
+	
+5. Once connected, you need to create a external schema (metadata - Glue , data - S3 in AWS space)
+
+	CREATE external schema automobile from data catalog
+	database 'automobile'
+	iam_role 'arn:aws:iam::360304535068:role/redshiftRoles'
+	region 'us-east-1'
+
+
+Once the schema is created, ensure you have the table reflecting during schema selection. 
+
+Perform queries
+select * from automobile.automobile limit 5;
+
+
+
+When the cluster is created, the default database that is used is
+
+	Default DB: dev
+	Default DB User: awsuser
+	Password: Passw0rd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+Assignment: Ecommerce Purchase Dataset
+=========================================
+
+Use AWS Glue + S3 + Redshift to perform the following:
+
+1. What is the average Purchase Price?
+2. What were the highest and lowest purchase prices? 
+3. How many people have English 'en' as their Language of choice on the website?
+4. How many people have the job title of "Lawyer" ? 
+5. How many people made the purchase during the AM and how many people made the purchase during PM ?
+6. What are the 5 most common Job Titles?
+7. Someone made a purchase that came from Lot: "90 WT" , what was the Purchase Price for this transaction?
+8. What is the email of the person with the following Credit Card Number: 4926535242672853 
+9. How many people have American Express as their Credit Card Provider *and made a purchase above $95 ?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Home work Assignment
+======================
+
+Create a manual pipeline that can perform the following
+
+LogGenerator ----> AWS Kinesis Data Stream ---> Kinesis Firehose ---> AWS GLue ---> Athena
+
+
+Answer the following questions:
+1. Find the top 3 loyal customers and their location
+2. Find the costly product 
+3. Find the product that has high demand
+4. Find the product that has low demand.

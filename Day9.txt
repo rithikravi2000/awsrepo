@@ -1,0 +1,67 @@
+AWS Data Engineering ----------- Day9
+Trainer: PRashant Nair
+===============================================================================================================================
+
+Agenda
+------
+Github Basics
+Revision
+Project Discussion Part2
+
+
+Github -----> Online Repository
+	      Source Code Management
+	      Version Control
+
+
+
+Github Basics
+================
+
+
+C:\Users\Prashant>d:
+
+D:\>cd AWSTigerAnalytics
+
+Create a Personal Access Token ---------> Settings > Developer Settings > Personal Access Token > Generate
+
+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
+
+
+
+D:\AWSTigerAnalytics>cd Notes
+
+D:\AWSTigerAnalytics\Notes>git init
+Initialized empty Git repository in D:/AWSTigerAnalytics/Notes/.git/
+
+D:\AWSTigerAnalytics\Notes>git add .
+
+G:\Notes>git config user.email "prashant.nair2050@gmail.com"
+
+G:\Notes>git config user.name "prashantnair2050"
+
+D:\AWSTigerAnalytics\Notes>git commit -m "First Commit"
+[master (root-commit) 80d0dcc] First Commit
+ 8 files changed, 1431 insertions(+)
+ create mode 100644 Day1.txt
+ create mode 100644 Day2.txt
+ create mode 100644 Day3.txt
+ create mode 100644 Day4.txt
+ create mode 100644 Day5.txt
+ create mode 100644 Day6.txt
+ create mode 100644 Day7.txt
+ create mode 100644 Day8.txt
+
+D:\AWSTigerAnalytics\Notes>git remote add origin https://github.com/prashantnair2050/testtttt.git
+
+D:\AWSTigerAnalytics\Notes>git branch -M main
+
+D:\AWSTigerAnalytics\Notes>git push -u origin master
+Logon failed, use ctrl+c to cancel basic credential prompt.
+Username for 'https://github.com':
+D:\AWSTigerAnalytics\Notes>
+
+
+To clone the repository
+
+git clone https://github.com/prashantnair2050/testRepository.git
